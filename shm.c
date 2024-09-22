@@ -9,12 +9,12 @@
 #include "shm.h"
 #include "utils.h"
 
-#define SIZE 100
 
 int
-shm_create (key_t key)
+shm_create (key_t  key,
+            size_t size)
 {
-  return shmget (key, SIZE, IPC_CREAT | IPC_EXCL | 510);
+  return shmget (key, size, IPC_CREAT | IPC_EXCL | 511);
 }
 
 int
@@ -27,10 +27,21 @@ void
 shm_set_r_count (int  shm_id,
                  uint count)
 {
+  struct shmid_ds buf;
+
+  if (shmctl (shm_id, IPC_STAT, &buf) == -1)
+    utils_throw_error (NULL);
+
+  buf.shm_nattch = count;
+
+  if (shmctl (shm_id, IPC_SET, &buf) == -1)
+    utils_throw_error (NULL);
 }
 
 void
-shm_put_content (int shm_id)
+shm_put_content (int    shm_id,
+                 char  *content,
+                 size_t size)
 {
   char *ptr;
 
@@ -39,7 +50,7 @@ shm_put_content (int shm_id)
   if (ptr == (void *) -1)
     utils_throw_error (NULL);
 
-  memcpy (ptr, "Hello", 5);
+  memcpy (ptr, content, size);
 }
 
 char *

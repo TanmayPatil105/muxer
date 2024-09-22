@@ -22,7 +22,7 @@ client_read_shm (key_t key)
 
   ptr = shm_get (shm_id);
 
-  fprintf (stdout, "%s\n", ptr);
+  fprintf (stdout, "%s", ptr);
 
   /* Free up memory */
   shm_cleanup (ptr, shm_id);
