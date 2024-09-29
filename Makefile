@@ -8,8 +8,14 @@ BIN_DIR = /bin
 CC := gcc
 CXX := gcc
 CXXFLAGS := -g -Wall -Wextra --pedantic-errors
+CCFLAGS += -g -Wall -Wextra --pedantic-errors
 
 all: $(TARGET)
+
+$(OBJS): $(SRCS)
+	for SRC in $(SRCS); do \
+		$(CC) $(CCFLAGS) -c $$SRC; \
+	done
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)

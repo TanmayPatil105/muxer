@@ -18,10 +18,8 @@ utils_get_num_from_str (char *str)
 
   while (*ptr != '\0')
     {
-      if(!isdigit(*ptr))
+      if(!isdigit(*ptr++))
         return -1;
-
-      *ptr++;
     }
 
   return (uint) atoi(str);

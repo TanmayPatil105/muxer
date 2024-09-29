@@ -47,9 +47,10 @@ helper_setup_shm (key_t key,
   char *content;
   int shm_id;
   size_t size;
+  void *addr;
 
   content = get_stdin(&size);
-  shm_id = shm_create (key, size);
+  shm_id = shm_create (key, sizeof(uint) + size);
 
   if (shm_id == -1)
     {
@@ -59,10 +60,13 @@ helper_setup_shm (key_t key,
         utils_throw_error (NULL);
     }
 
-  /* Unfortunately Linux doesn't support this :( */
-  /* shm_set_r_count (shm_id, r_count); */
+  addr = shm_get (shm_id);
 
-  shm_put_content (shm_id, content, size);
+  shm_set_r_count (addr, r_count);
+  shm_put_content (addr, content, size);
+
+  if (content != NULL)
+    free (content);
 }
 
 void
