@@ -1,14 +1,32 @@
-muxer: wip
+# muxer
 
-1x1 muxer for now
+Share output of one process to multiple processes
 
-# Usage
-From shell 1
+## Usage
+process 1
 ```
-$ cat Makefile | muxer
-722145471
+$ cat Makefile | muxer -c 2
+1364263253
 ```
-From shell 2
+process 2
 ```
-$ muxer 722145471
+$ muxer 1364263253
+TARGET = muxer
+SRCS = utils.c shm.c client.c helper.c main.c
+OBJS = $(SRCS:.c=.o)
+
+INSTALL = /usr/bin/install -c -D
+BIN_DIR = /bin
+...
+```
+process 3
+```
+$ muxer 1364263253
+TARGET = muxer
+SRCS = utils.c shm.c client.c helper.c main.c
+OBJS = $(SRCS:.c=.o)
+
+INSTALL = /usr/bin/install -c -D
+BIN_DIR = /bin
+...
 ```
